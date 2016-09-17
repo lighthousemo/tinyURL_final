@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <% include ./partials/_header %>
+
+    <p>
+    <ul>
+
+      <form action="/urls/<%= key %>/edit?_method=PUT" method="POST" style="margin:150px;">
+      <label for="longURL">Update URL:</label>
+      <input id="longURL" type="text" name="longURL" placeholder="http://" style="width: 300px" value="<%= longURL %>">
+      <input type="submit" value="Submit"></button>
+    </form>
+
+    </ul>
+
+
+
+
+</p>
+</body>
+</html>
