@@ -11,9 +11,9 @@
    <% for (var key in urls) { %>
 <li><%= urls[key].longURL %></li>
 
-    <form method="POST" action="http://localhost:8080/urls/<%= key %>?_method=DELETE"><button type="submit">DELETE</button></form></li>
+    <form method="POST" action="http://localhost:8080/urls/<%= urls[key].shortURL %>?_method=DELETE"><button type="submit">DELETE</button></form></li>
 
-    <form method="GET" action="http://localhost:8080/urls/<%= key %>/edit"><button type="submit">EDIT</button></form>
+    <form method="GET" action="http://localhost:8080/urls/<%= urls[key].shortURL %>/edit"><button type="submit">EDIT</button></form>
 
      <!-- <a href="http://localhost:8080/urls/<%= key %>/edit">EDIT</a></button></li> -->
 

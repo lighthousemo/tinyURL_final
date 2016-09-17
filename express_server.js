@@ -107,11 +107,11 @@ app.get("/urls", (req, res) => {
 });
 
 
-// app.get("/urls/new", (req, res) => {
-//   console.log("GET /urls_new");
-//   res.render("urls_new");
+app.get("/urls/new", (req, res) => {
+  console.log("GET /urls_new");
+  res.render("urls_new");
 
-// });
+});
 
 //EXAMPLE one//////////////////////////////
 // app.get("/urls/:key/edit", (req, res) => {
@@ -123,31 +123,97 @@ app.get("/urls", (req, res) => {
 // });
 ///////////////////////////////////////////
 
-app.get("/urls/:id/edit", (req, res) => {
-  let shortURL = req.params.id;
-  getLongURL(dbInstance, shortURL, (err, longURL) => {
-    console.log(longURL);
-    // the longURL available in a callback function
+app.get("/urls/:key/edit", (req, res) => {
+
+
+
+  connectAndThen(function(err, db){
+
+    console.log("Connected to db then edit this!");
+    console.log("With errors: "+err);
+
+    db.collection("urls").findOne({shortURL: req.params.key}, (err, url) => {
+
+      res.render("urls_show", {url: url})
 
   });
 });
 
+});
+
+
+//   let shortURL = req.params.id;
+//   getLongURL(dbInstance, shortURL, (err, longURL) => {
+//     console.log(longURL);
+//     // the longURL available in a callback function
+
+//   });
+// });
+
 
 app.put("/urls/:key/edit", (req, res) =>{
-    urlDatabase[req.params.key] = req.body.longURL;
-    console.log(urlDatabase);
-    res.redirect("/urls");
+
+    connectAndThen(function(err, db) {
+
+    console.log("Connected to db then update this url!");
+    console.log("With errors: "+err);
+
+    db.collection("urls").updateOne({shortURL: req.params.key}, {$set: {longURL: req.body.longURL}}, (err, url) => {
+
+
+        res.redirect("/urls");
+    })
+  });
 });
+
+
+
+
+//     urlDatabase[req.params.key] = req.body.longURL;
+//     console.log(urlDatabase);
+//     res.redirect("/urls");
+// });
+
+
+
 
 app.post("/urls", (req, res) => {
-  console.log("POST /urls", req.body)
+
   var theShortURL = generateRandomString();
   var userEnterURL = req.body.longURL;
-  urlDatabase[theShortURL] = userEnterURL;
-  console.log(urlDatabase);
- res.redirect('urls/shortURL');
 
+  var newUrl = {
+    shortURL: theShortURL,
+    longURL: userEnterURL
+  }
+
+  console.log("Attempting to insert new url: "+newUrl)
+
+     connectAndThen(function(err, db) {
+
+      console.log("Connected to db then tried to delete!");
+      console.log("With errors: "+err);
+      console.log(req.params.key);
+
+        db.collection("urls").insert(newUrl, function (err) {
+          if (err) res.status(500).json(err);
+
+
+          res.redirect("/urls");
+        })
+
+    });
 });
+
+
+//   console.log("POST /urls", req.body)
+//   var theShortURL = generateRandomString();
+//   var userEnterURL = req.body.longURL;
+//   urlDatabase[theShortURL] = userEnterURL;
+//   console.log(urlDatabase);
+//  res.redirect('urls/shortURL');
+
+// });
 
 
 
@@ -158,14 +224,15 @@ app.delete("/urls/:key", (req, res) => {
 
     console.log("Connected to db then tried to delete!");
     console.log("With errors: "+err);
-
+    console.log(req.params.key);
 
     db.collection("urls").deleteOne({shortURL: req.params.key}, function (err) {
       console.log(err);
-    })
-      console.log("HI");
+
 
       res.redirect("/urls");
+    })
+
   });
 
 
@@ -193,10 +260,22 @@ app.get("/urls/shortURL", (req, res) => {
   res.render('urls_create', {shortURL: theShortenedURL});
 });
 
+
+//redirect page
 app.get("/u/:shortURL", (req, res) => {
-  var longURL = urlDatabase[req.params.shortURL];
-  res.redirect(longURL);
+
+  connectAndThen(function(err, db) {
+
+    db.collection("urls").findOne({shortURL: req.params.shortURL}, function (err) {
+      console.log(err);
+      res.redirect("longURL");
+    })
+  });
 });
+
+//   var longURL = urlDatabase[req.params.shortURL];
+//   res.redirect(longURL);
+// });
 
 
 app.listen(PORT, () => {
