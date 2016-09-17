@@ -104,16 +104,14 @@ app.get("/urls", (req, res) => {
   });
 
 
-
-
 });
 
 
-app.get("/urls/new", (req, res) => {
-  console.log("GET /urls_new");
-  res.render("urls_new");
+// app.get("/urls/new", (req, res) => {
+//   console.log("GET /urls_new");
+//   res.render("urls_new");
 
-});
+// });
 
 //EXAMPLE one//////////////////////////////
 // app.get("/urls/:key/edit", (req, res) => {
@@ -151,11 +149,38 @@ app.post("/urls", (req, res) => {
 
 });
 
+
+
+
 app.delete("/urls/:key", (req, res) => {
-   var deleteKey = req.params.key;
-   delete urlDatabase[deleteKey];
-   res.redirect("/urls");
+
+   connectAndThen(function(err, db){
+
+    console.log("Connected to db then tried to delete!");
+    console.log("With errors: "+err);
+
+
+    db.collection("urls").deleteOne({shortURL: req.params.key}, function (err) {
+      console.log(err);
+    })
+      console.log("HI");
+
+      res.redirect("/urls");
+  });
+
+
 });
+
+
+
+// app.delete("/urls/:key", (req, res) => {
+//    var deleteKey = req.params.key;
+//    delete urlDatabase[deleteKey];
+//    res.redirect("/urls");
+// });
+
+
+
 
 // app.put("urls/:key", (req, res) => {
 //     var editKey = req.params.key
