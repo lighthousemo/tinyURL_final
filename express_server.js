@@ -10,39 +10,10 @@ app.use(methodOverride("_method"));
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: false }));
 
-var urlDatabase = {
-  "AAAAAA": "http://www.cats.ca",
-  "BBBBBB": "http://www.dogs.com"
-};
 
-// [
-//   { "_id" : ObjectId("57dc88ae2981fae5f640b85f"), "shortURL" : "b2xVn2", "longURL" : "http://www.lighthouselabs.ca" }
-//   { "_id" : ObjectId("57dc88ae2981fae5f640b860"), "shortURL" : "9sm5xK", "longURL" : "http://www.google.com" }
-// ]
 
 console.log(`Connecting to MongoDB running at: ${MONGODB_URI}`);
 
-// var dbInstance;
-
-// MongoClient.connect(MONGODB_URI, (err, db) => {
-//     if (err) {
-//     console.log('Could not connect! Unexpected error. Details below.');
-//     throw err;
-//   }
-//   dbInstance = db;
-
-
-//   console.log('Connected to the database!');
-//   let collection = db.collection("urls");
-
-//   console.log('Retreiving documents for the "test" collection...');
-//   collection.find().toArray((err, results) => {
-//     console.log('results: ', results);
-
-
-
-//   });
-// });
 
 
 function findURLs(){
@@ -113,15 +84,6 @@ app.get("/urls/new", (req, res) => {
 
 });
 
-//EXAMPLE one//////////////////////////////
-// app.get("/urls/:key/edit", (req, res) => {
-//   var templateVars1 = {
-//     longURL: urlDatabase[req.params.key],
-//     key: req.params.key
-//   };
-//   res.render("urls_show", templateVars1);
-// });
-///////////////////////////////////////////
 
 app.get("/urls/:key/edit", (req, res) => {
 
@@ -142,14 +104,6 @@ app.get("/urls/:key/edit", (req, res) => {
 });
 
 
-//   let shortURL = req.params.id;
-//   getLongURL(dbInstance, shortURL, (err, longURL) => {
-//     console.log(longURL);
-//     // the longURL available in a callback function
-
-//   });
-// });
-
 
 app.put("/urls/:key/edit", (req, res) =>{
 
@@ -167,16 +121,6 @@ app.put("/urls/:key/edit", (req, res) =>{
 });
 
 
-
-
-//     urlDatabase[req.params.key] = req.body.longURL;
-//     console.log(urlDatabase);
-//     res.redirect("/urls");
-// });
-
-
-
-
 app.post("/urls", (req, res) => {
 
   var theShortURL = generateRandomString();
@@ -187,7 +131,7 @@ app.post("/urls", (req, res) => {
     longURL: userEnterURL
   }
 
-  console.log("Attempting to insert new url: "+newUrl)
+  console.log("Attempting to insert new url: ", newUrl);
 
      connectAndThen(function(err, db) {
 
@@ -195,25 +139,13 @@ app.post("/urls", (req, res) => {
       console.log("With errors: "+err);
       console.log(req.params.key);
 
-        db.collection("urls").insert(newUrl, function (err) {
+        db.collection("urls").insert(newUrl, function (err, url) {
           if (err) res.status(500).json(err);
-
-
-          res.redirect("/urls");
+          res.render("urls_create", {url: newUrl});
         })
 
     });
 });
-
-
-//   console.log("POST /urls", req.body)
-//   var theShortURL = generateRandomString();
-//   var userEnterURL = req.body.longURL;
-//   urlDatabase[theShortURL] = userEnterURL;
-//   console.log(urlDatabase);
-//  res.redirect('urls/shortURL');
-
-// });
 
 
 
@@ -240,42 +172,20 @@ app.delete("/urls/:key", (req, res) => {
 
 
 
-// app.delete("/urls/:key", (req, res) => {
-//    var deleteKey = req.params.key;
-//    delete urlDatabase[deleteKey];
-//    res.redirect("/urls");
-// });
-
-
-
-
-// app.put("urls/:key", (req, res) => {
-//     var editKey = req.params.key
-// });
-
-app.get("/urls/shortURL", (req, res) => {
-  console.log(Object.keys(urlDatabase));
-  var length = Object.keys(urlDatabase).length - 1;
-  var theShortenedURL = Object.keys(urlDatabase)[length];
-  res.render('urls_create', {shortURL: theShortenedURL});
-});
-
 
 //redirect page
 app.get("/u/:shortURL", (req, res) => {
 
   connectAndThen(function(err, db) {
 
+
     db.collection("urls").findOne({shortURL: req.params.shortURL}, function (err) {
       console.log(err);
-      res.redirect("longURL");
+      res.redirect(url);
     })
   });
 });
 
-//   var longURL = urlDatabase[req.params.shortURL];
-//   res.redirect(longURL);
-// });
 
 
 app.listen(PORT, () => {

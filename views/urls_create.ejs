@@ -2,9 +2,9 @@
 <html lang="en">
 <body>
     <% include ./partials/_header %>
-      <%= shortURL %>
+      <p>Your smaller link: http://localhost:8080/u/<%= url.shortURL %></p>
 
-  <p>Follow your link <a href="http://localhost:8080/u/<%= shortURL %>">HERE</a>.
+  <p>Follow your link <a href="<%= url.longURL %>">HERE</a>.
   </p>
 
 
