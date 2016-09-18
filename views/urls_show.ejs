@@ -6,7 +6,7 @@
     <p>
     <ul>
 
-      <form action="/urls/<%= url.shortURL %>/edit?_method=PUT" method="POST" style="margin:150px;">
+      <form action="/urls/<%= url.shortURL %>/edit?_method=POST" method="POST" style="margin:150px;">
       <label for="longURL">Update URL:</label>
       <input id="longURL" type="text" name="longURL" placeholder="http://" style="width: 300px" value="<%= url.longURL %>">
       <input type="submit" value="Submit"></button>
