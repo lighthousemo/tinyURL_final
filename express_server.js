@@ -105,7 +105,7 @@ app.get("/urls/:key/edit", (req, res) => {
 
 
 
-app.put("/urls/:key/edit", (req, res) =>{
+app.post("/urls/:key/edit", (req, res) =>{
 
     connectAndThen(function(err, db) {
 
