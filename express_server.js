@@ -1,3 +1,5 @@
+//important: fix code indentation in this file.
+//See https://github.com/airbnb/javascript#whitespace for indentation tips.
 const express = require("express");
 const app = express();
 const methodOverride = require("method-override");
@@ -15,7 +17,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 console.log(`Connecting to MongoDB running at: ${MONGODB_URI}`);
 
 
-
+// minor: remove this function. it is not used anywhere.
 function findURLs(){
 
   connectAndThen(function(err, db){
@@ -31,6 +33,7 @@ function findURLs(){
 function generateRandomString() {
    var text = "";
  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+ // minor: It is considered best practice to add curly braces. See: https://github.com/airbnb/javascript#blocks 
  for( var i=0; i < 6; i++ )
    text += possible.charAt(Math.floor(Math.random() * possible.length));
  return text;
@@ -50,6 +53,17 @@ function getLongURL(db, shortURL, cb) {
 
 
 
+// important: You only need to connect to the database once.
+// Once you connect, you can pass the db object to any
+// part of your code that needs to issue queries to the database.
+//
+// Suggestion: Make your program connect to the database first.
+// Store the connection object in a db variable.
+//
+// Once you are connected to the database, get express to listen for incoming
+// HTTP connections. If the program listens to HTTP connections before the database
+// is connected, the risk is someone will make a request that needs the database
+// and the request will fail.
 function connectAndThen(cb){
 
   MongoClient.connect(MONGODB_URI, (err, db) => {
@@ -66,6 +80,7 @@ app.get("/urls", (req, res) => {
     console.log("Connected to db then did this!");
     console.log("With errors: "+err);
 
+    // minor: Is it necessary to call .toArray here? I think it might work without it.
     db.collection("urls").find().toArray((err, urls) => {
 
 
@@ -108,7 +123,8 @@ app.get("/urls/:key/edit", (req, res) => {
 });
 
 
-
+// minor: In rest convention the url for the HTTP endpoint that permorms an edit
+// is not /resource/:key/edit. Please fix.
 app.post("/urls/:key/edit", (req, res) =>{
 
     connectAndThen(function(err, db) {

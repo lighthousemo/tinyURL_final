@@ -1,3 +1,5 @@
+<!-- important: At this stage it is important to practice indenting the code correctly. Please fix the indentation in this file. -->
+<!-- important: Once you are done fixing the indentation you will notice one of the html tags is invalid. -->
 <!DOCTYPE html>
 <html lang="en">
 <body>
@@ -13,8 +15,10 @@
 
     <form method="POST" action="http://localhost:8080/urls/<%= urls[key].shortURL %>?_method=DELETE"><button type="submit">DELETE</button></form></li>
 
+    <!-- minor: We usually use <a> tags to link to another page instead <form method="GET"> -->
     <form method="GET" action="http://localhost:8080/urls/<%= urls[key].shortURL %>/edit"><button type="submit">EDIT</button></form>
 
+    <!-- minor: remove unused code. -->
      <!-- <a href="http://localhost:8080/urls/<%= key %>/edit">EDIT</a></button></li> -->
 
 

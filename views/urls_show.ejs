@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- important: At this stage it is important to practice indenting the code correctly. Please fix the indentation. -->
 <html lang="en">
 <body>
     <% include ./partials/_header %>
@@ -6,6 +7,7 @@
     <p>
     <ul>
 
+      <!-- important: edit forms should do a PUT request as per REST rules -->
       <form action="/urls/<%= url.shortURL %>/edit?_method=POST" method="POST" style="margin:150px;">
       <label for="longURL">Update URL:</label>
       <input id="longURL" type="text" name="longURL" placeholder="http://" style="width: 300px" value="<%= url.longURL %>">

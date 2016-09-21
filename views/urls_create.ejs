@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <body>
+  <!-- important: At this stage it is important to practice indenting the code correctly. Please fix the indentation. -->
     <% include ./partials/_header %>
       <p>Your URL: <%= url.longURL %></p>
       <p>Your smaller link: localhost:8080/u/<%= url.shortURL %></p>
 
   <p>Follow your link <a href="<%= url.longURL %>">HERE</a>.
   </p>
+  <!-- minor: when you are creating a link to another page on the same domain (ex: http://localhost:8080)
+    you can use a relative path. Ex: href="/urls/new"-->
   <p>Click <a href="http://localhost:8080/urls/new">HERE</a> to enter a new URL.
 
 
