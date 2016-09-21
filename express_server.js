@@ -77,6 +77,10 @@ app.get("/urls", (req, res) => {
 
 });
 
+app.get("/", (req, res) => {
+  res.redirect("urls/new");
+});
+
 
 app.get("/urls/new", (req, res) => {
   console.log("GET /urls_new");
@@ -179,9 +183,9 @@ app.get("/u/:shortURL", (req, res) => {
   connectAndThen(function(err, db) {
 
 
-    db.collection("urls").findOne({shortURL: req.params.shortURL}, function (err) {
+    db.collection("urls").findOne({shortURL: req.params.shortURL}, function (err, url) {
       console.log(err);
-      res.redirect(url);
+      res.redirect(url.longURL);
     })
   });
 });
